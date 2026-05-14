@@ -1,0 +1,180 @@
+<html>
+
+<head>
+    <title>User Profile</title>
+</head>
+
+<script>
+
+    /* Load profile from MongoDB */
+    fetch('/get-profile')
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (data) {
+
+            document.getElementById('name').innerHTML = data.name;
+            document.getElementById('email').innerHTML = data.email;
+            document.getElementById('interests').innerHTML = data.interests;
+        });
+
+    function editProfile() {
+
+        document.querySelector('.container').style.display = 'none';
+        document.querySelector('.container-edit').style.display = 'block';
+
+        var name = document.querySelector('#name').innerHTML;
+        document.querySelector('#input-name').value = name;
+
+        var email = document.querySelector('#email').innerHTML;
+        document.querySelector('#input-email').value = email;
+
+        var interests = document.querySelector('#interests').innerHTML;
+        document.querySelector('#input-interests').value = interests;
+    }
+
+    function saveProfile() {
+
+        var userObj = {
+            name: document.querySelector('#input-name').value,
+            email: document.querySelector('#input-email').value,
+            interests: document.querySelector('#input-interests').value
+        };
+
+        fetch('/update-profile', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(userObj)
+        })
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (data) {
+
+            document.querySelector('#name').innerHTML = data.name;
+            document.querySelector('#email').innerHTML = data.email;
+            document.querySelector('#interests').innerHTML = data.interests;
+
+            document.querySelector('.container').style.display = 'block';
+            document.querySelector('.container-edit').style.display = 'none';
+        });
+    }
+
+</script>
+
+<style>
+
+    body {
+        background: #141414;
+        font-family: Arial;
+    }
+
+    .container,
+    .container-edit {
+        display: block;
+        width: 500px;
+        margin: 100px auto;
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+    }
+
+    .container-edit {
+        display: none;
+    }
+
+    img {
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        display: block;
+        margin-bottom: 20px;
+    }
+
+    #header {
+        text-align: center;
+    }
+
+    h3 {
+        display: inline;
+    }
+
+    input {
+        display: inline;
+        font-size: 20px;
+    }
+
+    .button {
+        padding: 10px 20px;
+        font-size: 16px;
+        border: none;
+        background: black;
+        color: white;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+</style>
+
+<body>
+
+    <div class='container'>
+
+        <h1 id='header'>User Profile</h1>
+
+        <img src='/profile-1.jpg'>
+
+        Name:
+        <h3 id='name'></h3>
+
+        <hr />
+
+        Email:
+        <h3 id='email'></h3>
+
+        <hr />
+
+        Interests:
+        <h3 id='interests'></h3>
+
+        <hr />
+
+        <button class='button' onclick='editProfile()'>
+            Edit Profile
+        </button>
+
+    </div>
+
+    <div class='container-edit'>
+
+        <h1 id='header'>User Profile</h1>
+
+        <img src='profile-picture'>
+
+        Name:
+        <input id='input-name' type='text' />
+
+        <hr />
+
+        Email:
+        <input id='input-email' type='email' />
+
+        <hr />
+
+        Interests:
+        <input id='input-interests' type='text' />
+
+        <hr />
+
+        <button class='button' onclick='saveProfile()'>
+            Save Profile
+        </button>
+
+    </div>
+
+</body>
+
+</html>
