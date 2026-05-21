@@ -9,7 +9,7 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-const url = 'mongodb://admin:password@192.168.5.234:27017';
+const url = 'mongodb://admin:password@mongodb:27017';
 const client = new MongoClient(url);
 
 let db;
